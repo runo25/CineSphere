@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 class User(AbstractUser):
     profile_pic = models.ImageField(upload_to="profiles/", blank=True)
@@ -8,14 +9,14 @@ class User(AbstractUser):
     preferred_genres = models.ManyToManyField("Genre", blank=True)
     groups = models.ManyToManyField(
         'auth.Group',
-        related_name='myapp_user_groups',  # Update related_name
+        related_name='myapp_user_groups',
         blank=True,
         help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
         verbose_name='groups',
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
-        related_name='myapp_user_permissions',  # Update related_name
+        related_name='myapp_user_permissions',
         blank=True,
         help_text='Specific permissions for this user.',
         verbose_name='user permissions',
@@ -47,14 +48,14 @@ class Movie(models.Model):
     average_rating = models.FloatField(default=0.0)
 
 class Review(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)])
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class TopTenList(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     movies = models.ManyToManyField(Movie)
 
@@ -65,7 +66,7 @@ class Badge(models.Model):
 
 class ForumThread(models.Model):
     title = models.CharField(max_length=200)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()
 
 class GamificationElement(models.Model):
@@ -79,7 +80,7 @@ class SponsoredContent(models.Model):
     link = models.URLField()
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     earnings = models.PositiveIntegerField(default=0)
     top_ten_lists = models.ManyToManyField(TopTenList, blank=True)
     weekly_picks = models.ManyToManyField(Movie, blank=True)
