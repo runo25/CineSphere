@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - CineSphere</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#2A2F35] text-[#F5F5F5] font-sans">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="glass-card p-8 w-full max-w-md">
+      <h2 class="text-2xl font-bold text-center mb-8">Login to CineSphere</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="w-full px-4 py-2 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
+          Login
+        </button>
+      </form>
+      <div class="mt-4 text-center">
+        <a href="{% url 'signup' %}" class="text-[#00FFD1] hover:underline">Sign up with Google</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

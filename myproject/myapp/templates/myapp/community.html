@@ -1,0 +1,71 @@
+{% extends "myapp/base.html" %}
+
+{% block title %}Community - CineSphere{% endblock %}
+
+{% block content %}
+<!-- Forum Threads Section -->
+<section class="py-16">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-[#E94F64] mb-8">Forum Threads</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {% for thread in forum_threads %}
+      <div class="glass-card p-4">
+        <h3 class="text-lg font-semibold text-[#F5F5F5] mb-4">{{ thread.title }}</h3>
+        <p class="text-sm text-gray-400">Posted by {{ thread.user.username }}</p>
+        <p class="text-[#F5F5F5] mt-4">{{ thread.content }}</p>
+        <div class="mt-4 flex justify-between items-center">
+          <button class="px-4 py-2 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
+            Upvote
+          </button>
+          <button class="px-4 py-2 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
+            Comment
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="mt-8">
+      <h3 class="text-2xl font-bold text-[#E94F64] mb-4">Start a New Thread</h3>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="px-4 py-2 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
+          Submit Thread
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Gamification Elements Section -->
+<section class="py-16 bg-[#1A1A1A]">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-[#E94F64] mb-8">Gamification Elements</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {% for element in gamification_elements %}
+      <div class="glass-card p-4 text-center">
+        <img src="{{ element.image.url }}" alt="Badge" class="w-16 h-16 mx-auto mb-4">
+        <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ element.name }}</h3>
+        <p class="text-sm text-gray-400">{{ element.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Sponsored Content Section -->
+<section class="py-16">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-[#E94F64] mb-8">Sponsored Content</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {% for content in sponsored_content %}
+      <div class="glass-card card-hover p-4">
+        <img src="{{ content.image.url }}" alt="Sponsored Content" class="rounded-lg mb-4 w-full">
+        <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ content.title }}</h3>
+        <p class="text-sm text-gray-400">{{ content.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

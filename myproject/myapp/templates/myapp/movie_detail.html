@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ movie.title }} - CineSphere</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom glassmorphism effect */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    /* Hover effect for cards */
+    .card-hover:hover {
+      transform: scale(1.05);
+      transition: all 0.3s ease-in-out;
+    }
+    /* Fade-in animation */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 1s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-[#2A2F35] text-[#F5F5F5] font-sans">
+
+  <!-- Movie Detail Section -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row gap-8">
+        <div class="w-full md:w-1/3">
+          <img src="{{ movie.poster_url }}" alt="{{ movie.title }} Poster" class="rounded-lg w-full">
+        </div>
+        <div class="w-full md:w-2/3">
+          <h1 class="text-4xl font-bold text-[#E94F64] mb-4">{{ movie.title }}</h1>
+          <p class="text-gray-400 mb-4">{{ movie.genre }} | {{ movie.year }} | {{ movie.runtime }}</p>
+          <p class="text-[#F5F5F5] mb-8">{{ movie.description }}</p>
+          <a href="{{ movie.affiliate_link }}" class="px-8 py-3 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
+            Buy Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Embedded Trailer Section -->
+  <section class="py-16 bg-[#1A1A1A]">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-[#E94F64] mb-8">Watch Trailer</h2>
+      <div class="aspect-w-16 aspect-h-9">
+        <iframe src="https://www.youtube.com/embed/{{ movie.trailer_id }}" frameborder="0" allowfullscreen class="w-full h-full rounded-lg"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- User Reviews Section -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-[#E94F64] mb-8">User Reviews</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {% for review in movie.reviews %}
+        <div class="glass-card p-4">
+          <h3 class="text-lg font-semibold text-[#F5F5F5] mb-4">{{ review.user }}</h3>
+          <p class="text-sm text-gray-400 mb-4">{{ review.date }}</p>
+          <p class="text-[#F5F5F5]">{{ review.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="mt-8">
+        <h3 class="text-2xl font-bold text-[#E94F64] mb-4">Add a Review</h3>
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="px-4 py-2 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
+            Submit Review
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

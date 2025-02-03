@@ -1,0 +1,69 @@
+{% extends "myapp/base.html" %}
+
+{% block title %}Home - CineSphere{% endblock %}
+
+{% block content %}
+<!-- Homepage Hero Section -->
+<div class="min-h-screen flex flex-col items-center justify-center py-16">
+  <h1 class="text-6xl font-bold text-[#E94F64] mb-8 animate-fadeIn">
+    Welcome to CineSphere
+  </h1>
+  <p class="text-xl text-[#F5F5F5] mb-12 animate-fadeIn delay-200">
+    Your Social Hub for Film Enthusiasts
+  </p>
+  <input 
+    type="text" 
+    class="w-96 px-6 py-3 rounded-full bg-[#1A1A1A] text-[#F5F5F5] placeholder-[#E94F64] focus:outline-none focus:ring-2 focus:ring-[#00FFD1]"
+    placeholder="Search for movies..."
+  />
+  <button class="mt-8 px-8 py-3 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
+    Explore Movies
+  </button>
+</div>
+
+<!-- Trending Movies Section -->
+<section class="py-16">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-[#E94F64] mb-8">Trending Now</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {% for movie in movies %}
+      <div class="glass-card card-hover p-4">
+        <img src="{{ movie.poster.url }}" alt="{{ movie.title }} Poster" class="rounded-lg mb-4 w-full">
+        <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ movie.title }}</h3>
+        <p class="text-sm text-gray-400">{{ movie.genres.all|join:", " }} | {{ movie.release_date.year }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Top Ten Lists Section -->
+<section class="py-16 bg-[#1A1A1A]">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-[#E94F64] mb-8">Top Ten Lists</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {% for category in categories %}
+      <div class="glass-card card-hover p-4">
+        <h3 class="text-lg font-semibold text-[#F5F5F5] mb-4">{{ category.genres__name }}</h3>
+        <ul class="list-disc pl-5 text-sm text-gray-400">
+          {% for movie in movies %}
+          <li>{{ movie.title }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Affiliate Call-to-Action Section -->
+<section class="py-16">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-[#E94F64] mb-8 text-center">Earn While You Watch</h2>
+    <p class="text-lg text-[#F5F5F5] text-center mb-12">Join our affiliate program and start earning today!</p>
+    <button class="mx-auto block px-8 py-3 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
+      Join Affiliate Program
+    </button>
+  </div>
+</section>
+{% endblock %}

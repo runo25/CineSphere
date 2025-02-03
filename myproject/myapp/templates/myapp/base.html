@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}CineSphere{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom glassmorphism effect */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    /* Hover effect for cards */
+    .card-hover:hover {
+      transform: scale(1.05);
+      transition: all 0.3s ease-in-out;
+    }
+    /* Fade-in animation */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 1s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-[#2A2F35] text-[#F5F5F5] font-sans">
+  <!-- Header -->
+  <header class="bg-[#1A1A1A] py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <a href="/" class="text-2xl font-bold text-[#E94F64]">CineSphere</a>
+      <nav class="space-x-4">
+        <a href="/" class="text-[#F5F5F5] hover:text-[#00FFD1]">Home</a>
+        <a href="/community/" class="text-[#F5F5F5] hover:text-[#00FFD1]">Community</a>
+        <a href="/user/1/" class="text-[#F5F5F5] hover:text-[#00FFD1]">Profile</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#1A1A1A] py-4 mt-8">
+    <div class="container mx-auto px-4 text-center text-[#F5F5F5]">
+      &copy; 2025 CineSphere. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
