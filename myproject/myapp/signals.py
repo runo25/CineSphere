@@ -1,20 +1,12 @@
-# myapp/signals.py
+# signals.py
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.db import transaction, IntegrityError
-from django.conf import settings
-from .models import UserProfile
+from django.contrib.auth.models import User
+from .models import UserProfile, Community
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        transaction.on_commit(lambda: UserProfile.objects.get_or_create(user=instance))
-    else:
-        try:
-            # Try to save the related profile
-            instance.userprofile.save()
-        except UserProfile.DoesNotExist:
-            transaction.on_commit(lambda: UserProfile.objects.get_or_create(user=instance))
-
-            # If for some reason the profile is missing, create it after commit.
-            transaction.on_commit(lambda: UserProfile.objects.create(user=instance))
+        # Assign a default community (e.g., first Community object)
+        default_community = Community.objects.first()
+        UserProfile.objects.create(user=instance, community=default_community)

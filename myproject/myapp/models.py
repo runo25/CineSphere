@@ -79,15 +79,19 @@ class SponsoredContent(models.Model):
     image = models.ImageField(upload_to="sponsored_content/")
     link = models.URLField()
 
+class Community(models.Model):
+    name = models.CharField(max_length=200, unique=True, default="Default Community")  # Ensure names are unique
+    forum_threads = models.ManyToManyField(ForumThread, related_name="communities", blank=True)
+    gamification_elements = models.ManyToManyField(GamificationElement, blank=True)
+    sponsored_content = models.ManyToManyField(SponsoredContent, blank=True)
+
+    def __str__(self):
+        return self.name  # Makes the model more readable in the admin panel
+
 class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    community = models.ForeignKey(Community, on_delete=models.SET_NULL, null=True, blank=True)
     earnings = models.PositiveIntegerField(default=0)
     top_ten_lists = models.ManyToManyField(TopTenList, blank=True)
     weekly_picks = models.ManyToManyField(Movie, blank=True)
     badges = models.ManyToManyField(Badge, blank=True)
-
-class Community(models.Model):
-    forum_threads = models.ManyToManyField(ForumThread, blank=True)
-    gamification_elements = models.ManyToManyField(GamificationElement, blank=True)
-    sponsored_content = models.ManyToManyField(SponsoredContent, blank=True)
-
