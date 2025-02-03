@@ -35,6 +35,8 @@ class Person(models.Model):
     slug = models.SlugField(unique=True)
 
 class Movie(models.Model):
+    directors = models.ManyToManyField(Person, related_name="directed_movies", limit_choices_to={'role': 'director'})
+    cast = models.ManyToManyField(Person, related_name="acted_movies", limit_choices_to={'role': 'actor'})
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     description = models.TextField()
@@ -42,8 +44,6 @@ class Movie(models.Model):
     duration = models.PositiveIntegerField()  # Minutes
     poster = models.ImageField(upload_to="posters/")
     genres = models.ManyToManyField(Genre)
-    directors = models.ManyToManyField(Person, related_name="directed_movies")
-    cast = models.ManyToManyField(Person, related_name="acted_movies")
     average_rating = models.FloatField(default=0.0)
 
 class Review(models.Model):

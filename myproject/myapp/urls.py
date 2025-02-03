@@ -8,6 +8,4 @@ urlpatterns = [
     path('community/', views.community_view, name='community'),
     path('login/', views.login_view, name='login'),
     path('signup/', views.signup_view, name='signup'),
-    path('register/', views.register_view, name='register'),
-    path('forum/post/', views.post_thread_view, name='post_thread'),
 ]
