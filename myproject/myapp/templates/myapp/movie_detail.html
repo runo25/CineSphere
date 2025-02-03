@@ -36,29 +36,32 @@
     <div class="container mx-auto px-4">
       <div class="flex flex-col md:flex-row gap-8">
         <div class="w-full md:w-1/3">
-          <img src="{{ movie.poster_url }}" alt="{{ movie.title }} Poster" class="rounded-lg w-full">
+          <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }} Poster" class="rounded-lg w-full">
         </div>
         <div class="w-full md:w-2/3">
-
-
-          <!-- <div class="row">
-            <div class="col-md-4">
-              <img src="{{ movie.poster.url }}" class="img-fluid">
-            </div>
-            <div class="col-md-8">
-              <h1>{{ movie.title }}</h1>
-              <p>{{ movie.description }}</p>
-            </div>
-          </div>
-           -->
-          
           <h1 class="text-4xl font-bold text-[#E94F64] mb-4">{{ movie.title }}</h1>
-          <p class="text-gray-400 mb-4">{{ movie.genre }} | {{ movie.year }} | {{ movie.runtime }}</p>
-          <p class="text-[#F5F5F5] mb-8">{{ movie.description }}</p>
-          <a href="{{ movie.affiliate_link }}" class="px-8 py-3 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
+          <p class="text-gray-400 mb-4">{{ movie.genres|join:", " }} | {{ movie.release_date|date:"Y" }} | {{ movie.runtime }} mins</p>
+          <p class="text-[#F5F5F5] mb-8">{{ movie.overview }}</p>
+          <a href="#" class="px-8 py-3 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
             Buy Now
           </a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cast Section -->
+  <section class="py-16 bg-[#1A1A1A]">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-[#E94F64] mb-8">Cast</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {% for member in cast %}
+        <div class="glass-card card-hover p-4 text-center">
+          <img src="https://image.tmdb.org/t/p/w500{{ member.profile_path }}" alt="{{ member.name }}" class="rounded-full mb-4 w-32 h-32 mx-auto">
+          <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ member.name }}</h3>
+          <p class="text-sm text-gray-400">{{ member.character }}</p>
+        </div>
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -68,7 +71,11 @@
     <div class="container mx-auto px-4">
       <h2 class="text-3xl font-bold text-[#E94F64] mb-8">Watch Trailer</h2>
       <div class="aspect-w-16 aspect-h-9">
-        <iframe src="https://www.youtube.com/embed/{{ movie.trailer_id }}" frameborder="0" allowfullscreen class="w-full h-full rounded-lg"></iframe>
+        {% if trailers %}
+        <iframe src="https://www.youtube.com/embed/{{ trailers.0.key }}" frameborder="0" allowfullscreen class="w-full h-full rounded-lg"></iframe>
+        {% else %}
+        <p class="text-[#F5F5F5]">No trailers available.</p>
+        {% endif %}
       </div>
     </div>
   </section>

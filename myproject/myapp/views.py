@@ -11,28 +11,79 @@ from .models import Movie, UserProfile, Community
 from .forms import UserRegistrationForm, ForumThreadForm, ReviewForm
 from django.views import View
 from django.db.models import Q
+from django.conf import settings
+from django.core.cache import cache
+import requests
+
+
+def fetch_movie_details(movie_id):
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}"
+    params = {
+        "api_key": settings.TMDB_API_KEY,
+        "language": "en-US",
+        "append_to_response": "credits,videos"  # Fetch credits (cast/crew) and videos (trailers)
+    }
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        return response.json()
+    return None
+
+
+def fetch_movies():
+    # Check if movies are already cached
+    cached_movies = cache.get("trending_movies")
+    if cached_movies:
+        return cached_movies
+
+    # Fetch movies from TMDB API if not cached
+    url = "https://api.themoviedb.org/3/trending/movie/week"
+    params = {
+        "api_key": settings.TMDB_API_KEY,  # Use the API key from settings.py
+        "language": "en-US",
+    }
+    response = requests.get(url, params=params)
+
+    if response.status_code == 200:
+        movies = response.json().get("results", [])
+        # Cache the movies for 1 hour (3600 seconds)
+        cache.set("trending_movies", movies, timeout=3600)
+        return movies
+    else:
+        # Handle API errors (e.g., return an empty list or log the error)
+        return []
+
+
 
 def homepage(request):
-    context = {
-        'movies': Movie.objects.all(),
-        'categories': Movie.objects.values('genres__name').distinct(),
+    movies = fetch_movies()
+    context = {"movies": movies,
         'testimonials': UserProfile.objects.all()
     }
     return render(request, 'myapp/home.html', context)
 
 def movie_detail_view(request, movie_id):
-    movie = get_object_or_404(Movie, id=movie_id)
+    movie = fetch_movie_details(movie_id)
+    if not movie:
+        return render(request, "404.html", status=404)
+    
+    context = {
+        "movie": movie,
+        "cast": movie.get("credits", {}).get("cast", [])[:10],  # Top 10 cast members
+        "trailers": [video for video in movie.get("videos", {}).get("results", []) if video["site"] == "YouTube"],
+    }
+    
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
-            review.movie = movie
+            review.movie_id = movie_id
             review.save()
-            return redirect('movie_detail', movie_id=movie.id)
+            return redirect('movie_detail', movie_id=movie_id)
     else:
         form = ReviewForm()
-    context = {'movie': movie, 'form': form}
+    
+    context['form'] = form
     return render(request, 'myapp/movie_detail.html', context)
 
 @login_required
@@ -98,11 +149,11 @@ class WatchlistToggleView(LoginRequiredMixin, View):
             user.watchlist.add(movie)
         return JsonResponse({"status": "success", "action": "added" if movie not in user.watchlist else "removed"})
     
-def get_queryset(self):
-    query = self.request.GET.get("q")
-    return Movie.objects.filter(
-        Q(title__icontains=query) |
-        Q(genres__name__icontains=query) |
-        Q(directors__name__icontains=query) |
-        Q(cast__name__icontains=query)
-    ).distinct().prefetch_related('genres', 'directors', 'cast')
+# def get_queryset(self):
+#     query = self.request.GET.get("q")
+#     return Movie.objects.filter(
+#         Q(title__icontains=query) |
+#         Q(genres__name__icontains(query)) |
+#         Q(directors__name__icontains(query)) |
+#         Q(cast__name__icontains(query))
+#     ).distinct().prefetch_related('genres', 'directors', 'cast')

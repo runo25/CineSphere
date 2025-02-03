@@ -27,11 +27,13 @@
     <h2 class="text-3xl font-bold text-[#E94F64] mb-8">Trending Now</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
       {% for movie in movies %}
-      <div class="glass-card card-hover p-4">
-        <img src="{{ movie.poster.url }}" alt="{{ movie.title }} Poster" class="rounded-lg mb-4 w-full">
-        <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ movie.title }}</h3>
-        <p class="text-sm text-gray-400">{{ movie.genres.all|join:", " }} | {{ movie.release_date.year }}</p>
-      </div>
+      <a href="{% url 'movie_detail' movie.id %}">
+        <div class="glass-card card-hover p-4">
+          <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }} Poster" class="rounded-lg mb-4 w-full">
+          <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ movie.title }}</h3>
+          <p class="text-sm text-gray-400">{{ movie.release_date|date:"Y" }}</p>
+        </div>
+      </a>
       {% endfor %}
     </div>
   </div>

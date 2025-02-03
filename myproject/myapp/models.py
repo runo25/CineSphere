@@ -89,7 +89,7 @@ class Community(models.Model):
         return self.name  # Makes the model more readable in the admin panel
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     community = models.ForeignKey(Community, on_delete=models.SET_NULL, null=True, blank=True)
     earnings = models.PositiveIntegerField(default=0)
     top_ten_lists = models.ManyToManyField(TopTenList, blank=True)

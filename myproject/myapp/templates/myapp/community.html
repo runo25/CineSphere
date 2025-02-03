@@ -59,11 +59,13 @@
     <h2 class="text-3xl font-bold text-[#E94F64] mb-8">Sponsored Content</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
       {% for content in sponsored_content %}
-      <div class="glass-card card-hover p-4">
-        <img src="{{ content.image.url }}" alt="Sponsored Content" class="rounded-lg mb-4 w-full">
-        <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ content.title }}</h3>
-        <p class="text-sm text-gray-400">{{ content.description }}</p>
-      </div>
+      <a href="{% url 'movie_detail' content.id %}">
+        <div class="glass-card card-hover p-4">
+          <img src="{{ content.image.url }}" alt="Sponsored Content" class="rounded-lg mb-4 w-full">
+          <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ content.title }}</h3>
+          <p class="text-sm text-gray-400">{{ content.description }}</p>
+        </div>
+      </a>
       {% endfor %}
     </div>
   </div>
