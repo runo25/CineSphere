@@ -24,6 +24,7 @@
       </div>
       {% endfor %}
     </div>
+    {% if user.is_authenticated %}
     <div class="mt-8">
       <h3 class="text-2xl font-bold text-[#E94F64] mb-4">Start a New Thread</h3>
       <form method="post">
@@ -34,6 +35,9 @@
         </button>
       </form>
     </div>
+    {% else %}
+    <p class="text-center text-[#F5F5F5]">Please <a href="{% url 'login' %}" class="text-[#00FFD1] hover:underline">login</a> to start a new thread.</p>
+    {% endif %}
   </div>
 </section>
 

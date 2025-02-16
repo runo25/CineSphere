@@ -8,4 +8,5 @@ urlpatterns = [
     path('community/', views.community_view, name='community'),
     path('login/', views.login_view, name='login'),
     path('signup/', views.signup_view, name='signup'),
+    path('logout/', views.logout_view, name='logout'),  # Add logout URL
 ]

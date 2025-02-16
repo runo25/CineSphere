@@ -63,9 +63,13 @@
   <div class="container mx-auto px-4">
     <h2 class="text-3xl font-bold text-[#E94F64] mb-8 text-center">Earn While You Watch</h2>
     <p class="text-lg text-[#F5F5F5] text-center mb-12">Join our affiliate program and start earning today!</p>
-    <button class="mx-auto block px-8 py-3 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
-      Join Affiliate Program
-    </button>
+    {% if user.is_authenticated %}
+      <button class="mx-auto block px-8 py-3 rounded-full bg-[#E94F64] text-[#F5F5F5] font-semibold hover:bg-[#00FFD1] transition-colors duration-300">
+        Join Affiliate Program
+      </button>
+    {% else %}
+      <p class="text-center text-[#F5F5F5]">Please <a href="{% url 'login' %}" class="text-[#00FFD1] hover:underline">login</a> to join the affiliate program.</p>
+    {% endif %}
   </div>
 </section>
 {% endblock %}

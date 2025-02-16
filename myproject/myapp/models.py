@@ -43,7 +43,7 @@ class Movie(models.Model):
     description = models.TextField()
     release_date = models.DateField()
     duration = models.PositiveIntegerField()  # Minutes
-    poster = models.ImageField(upload_to="posters/")
+    poster = models.TextField() #url
     genres = models.ManyToManyField(Genre)
     average_rating = models.FloatField(default=0.0)
 

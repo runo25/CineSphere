@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout  # Add logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -53,7 +53,6 @@ def fetch_movies():
         return []
 
 
-
 def homepage(request):
     movies = fetch_movies()
     context = {"movies": movies,
@@ -92,6 +91,7 @@ def user_profile_view(request, user_id):
     context = {'user': user_profile}
     return render(request, 'myapp/user_profile.html', context)
 
+@login_required
 def community_view(request):
     community = Community.objects.first()
     if request.method == 'POST':
@@ -138,7 +138,10 @@ def signup_view(request):
         form = UserRegistrationForm()
     return render(request, 'myapp/signup.html', {'form': form})
 
-# movies/views.py
+def logout_view(request):
+    logout(request)
+    return redirect('homepage')
+
 class WatchlistToggleView(LoginRequiredMixin, View):
     def post(self, request, slug):
         movie = get_object_or_404(Movie, slug=slug)

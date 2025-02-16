@@ -57,7 +57,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {% for member in cast %}
         <div class="glass-card card-hover p-4 text-center">
-          <img src="https://image.tmdb.org/t/p/w500{{ member.profile_path }}" alt="{{ member.name }}" class="rounded-full mb-4 w-32 h-32 mx-auto">
+          <img src="https://image.tmdb.org/t/p/w500{{ member.profile_path }}" alt="{{ member.name }}" class="rounded-[30px] mb-4 w-40 h-40 mx-auto">
           <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ member.name }}</h3>
           <p class="text-sm text-gray-400">{{ member.character }}</p>
         </div>
